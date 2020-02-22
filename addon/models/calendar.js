@@ -1,10 +1,12 @@
-import Ember from 'ember';
+import { merge } from '@ember/polyfills';
+import { on } from '@ember/object/evented';
+import EmberObject, { computed } from '@ember/object';
 import moment from 'moment';
 import TimeSlot from './time-slot';
 import Day from './day';
 import OccurrenceProxy from './occurrence-proxy';
 
-export default Ember.Object.extend({
+export default EmberObject.extend({
   dayEndingTime: null,
   dayStartingTime: null,
   occurrences: null,
@@ -14,11 +16,11 @@ export default Ember.Object.extend({
   timeZone: null,
   occurrencePreview: null,
 
-  isInCurrentWeek: Ember.computed('week', '_currentWeek', function() {
+  isInCurrentWeek: computed('week', '_currentWeek', function() {
     return this.get('week').isSame(this.get('_currentWeek'));
   }),
 
-  timeSlots: Ember.computed(
+  timeSlots: computed(
     'timeZone',
     'dayStartingTime',
     'dayEndingTime',
@@ -31,11 +33,11 @@ export default Ember.Object.extend({
     });
   }),
 
-  days: Ember.computed(function() {
+  days: computed(function() {
     return Day.buildWeek({ calendar: this });
   }),
 
-  week: Ember.computed('startFromDate', 'startingTime', 'timeZone', function() {
+  week: computed('startFromDate', 'startingTime', 'timeZone', function() {
     if (this.get('startFromDate')) {
       return moment(this.get('startingTime')).tz(this.get('timeZone')).startOf('day');
     } else {
@@ -43,18 +45,18 @@ export default Ember.Object.extend({
     }
   }),
 
-  _currentWeek: Ember.computed('timeZone', function() {
+  _currentWeek: computed('timeZone', function() {
     return moment().tz(this.get('timeZone')).startOf('isoWeek');
   }),
 
-  initializeCalendar: Ember.on('init', function() {
+  initializeCalendar: on('init', function() {
     if (this.get('startingTime') == null) {
       this.goToCurrentWeek();
     }
   }),
 
   createOccurrence: function(options) {
-    var content = Ember.merge({
+    var content = merge({
       endsAt: moment(options.startsAt)
         .add(this.get('defaultOccurrenceDuration')).toDate(),
       title: this.get('defaultOccurrenceTitle')
@@ -62,7 +64,7 @@ export default Ember.Object.extend({
 
     return OccurrenceProxy.create({
       calendar: this,
-      content: Ember.Object.create(content)
+      content: EmberObject.create(content)
     });
   },
 

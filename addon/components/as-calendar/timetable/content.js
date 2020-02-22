@@ -1,21 +1,25 @@
-import Ember from 'ember';
+import { on } from '@ember/object/evented';
+import { htmlSafe } from '@ember/template';
+import { computed } from '@ember/object';
+import { oneWay } from '@ember/object/computed';
+import Component from '@ember/component';
 import moment from 'moment';
 
-export default Ember.Component.extend({
+export default Component.extend({
   classNameBindings: [':as-calendar-timetable-content'],
   attributeBindings: ['_style:style'],
 
-  days: Ember.computed.oneWay('model.days'),
+  days: oneWay('model.days'),
   model: null,
-  timeSlotDuration: Ember.computed.oneWay('model.timeSlotDuration'),
-  timeSlots: Ember.computed.oneWay('model.timeSlots'),
+  timeSlotDuration: oneWay('model.timeSlotDuration'),
+  timeSlots: oneWay('model.timeSlots'),
   timetable: null,
 
-  timeSlotStyle: Ember.computed('timeSlotHeight', function() {
-    return Ember.String.htmlSafe(`height: ${this.get('timeSlotHeight')}px`);
+  timeSlotStyle: computed('timeSlotHeight', function() {
+    return htmlSafe(`height: ${this.get('timeSlotHeight')}px`);
   }),
 
-  dayWidth: Ember.computed(function() {
+  dayWidth: computed(function() {
     if (this.get('_wasInserted')) {
       return this.$().width() / this.get('days.length');
     } else {
@@ -25,22 +29,22 @@ export default Ember.Component.extend({
 
   _wasInserted: false,
 
-  _style: Ember.computed(
+  _style: computed(
   'timeSlotHeight',
   'timeSlots.length', function() {
-    return Ember.String.htmlSafe(`height: ${this.get('timeSlots.length') *
+    return htmlSafe(`height: ${this.get('timeSlots.length') *
                        this.get('timeSlotHeight')}px;`);
   }),
 
-  _setWasInserted: Ember.on('didInsertElement', function() {
+  _setWasInserted: on('didInsertElement', function() {
     this.set('_wasInserted', true);
   }),
 
-  _registerWithParent: Ember.on('init', function() {
+  _registerWithParent: on('init', function() {
     this.set('timetable.contentComponent', this);
   }),
 
-  _selectTime: Ember.on('click', function(event) {
+  _selectTime: on('click', function(event) {
     var offset = this.$().offset();
     var offsetX = event.pageX - Math.floor(offset.left);
     var offsetY = event.pageY - Math.floor(offset.top);

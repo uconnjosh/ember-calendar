@@ -1,8 +1,9 @@
+import { on } from '@ember/object/evented';
+import Component from '@ember/component';
 import jstz from 'jstz';
-import Ember from 'ember';
 import ComponentCalendar from 'ember-calendar/models/component-calendar';
 
-export default Ember.Component.extend({
+export default Component.extend({
   classNameBindings: [':as-calendar'],
   tagName: 'section',
 
@@ -23,7 +24,7 @@ export default Ember.Component.extend({
   timeZone: jstz.determine().name(),
   title: null,
 
-  _initializeModel: Ember.on('init', function() {
+  _initializeModel: on('init', function() {
     this.set('model', ComponentCalendar.create({ component: this }));
   }),
 

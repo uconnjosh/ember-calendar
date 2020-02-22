@@ -1,16 +1,18 @@
+import { A } from '@ember/array';
+import { oneWay } from '@ember/object/computed';
+import EmberObject, { computed } from '@ember/object';
 import _ from 'lodash';
 import moment from 'moment';
-import Ember from 'ember';
 
-var Day = Ember.Object.extend({
+var Day = EmberObject.extend({
   calendar: null,
   offset: 0,
 
-  value: Ember.computed('_week', 'offset', function() {
+  value: computed('_week', 'offset', function() {
     return moment(this.get('_week')).add(this.get('offset'), 'day');
   }),
 
-  occurrences: Ember.computed(
+  occurrences: computed(
     'calendar.occurrences.@each.startingTime',
     'startingTime',
     'endingTime', function() {
@@ -22,7 +24,7 @@ var Day = Ember.Object.extend({
     });
   }),
 
-  occurrencePreview: Ember.computed(
+  occurrencePreview: computed(
     'calendar.occurrencePreview.startingTime',
     'startingTime',
     'endingTime', function() {
@@ -42,31 +44,31 @@ var Day = Ember.Object.extend({
     }
   }),
 
-  startingTime: Ember.computed(
+  startingTime: computed(
     'value',
     '_timeSlots.firstObject.time', function() {
     return moment(this.get('value'))
       .add(this.get('_timeSlots.firstObject.time'));
   }),
 
-  endingTime: Ember.computed(
+  endingTime: computed(
     'value',
     '_timeSlots.lastObject.endingTime', function() {
     return moment(this.get('value'))
       .add(this.get('_timeSlots.lastObject.endingTime'));
   }),
 
-  isToday: Ember.computed('value', function() {
+  isToday: computed('value', function() {
     return this.get('value').isSame(moment(), 'day');
   }),
 
-  _week: Ember.computed.oneWay('calendar.week'),
-  _timeSlots: Ember.computed.oneWay('calendar.timeSlots')
+  _week: oneWay('calendar.week'),
+  _timeSlots: oneWay('calendar.timeSlots')
 });
 
 Day.reopenClass({
   buildWeek: function(options) {
-    return Ember.A(_.range(0, 7).map(function(dayOffset) {
+    return A(_.range(0, 7).map(function(dayOffset) {
       return Day.create({
         calendar: options.calendar,
         offset: dayOffset

@@ -1,24 +1,24 @@
+import EmberObject, { computed } from '@ember/object';
 import moment from 'moment';
-import Ember from 'ember';
 
-export default Ember.Object.extend({
+export default EmberObject.extend({
   value: null,
 
-  description: Ember.computed('value', function() {
+  description: computed('value', function() {
     return `${this.get('_title')}
             (${this.get('_offset')}
             ${this.get('abbreviation')})`;
   }),
 
-  abbreviation: Ember.computed('value', function() {
+  abbreviation: computed('value', function() {
     return moment().tz(this.get('value')).format('z');
   }),
 
-  _title: Ember.computed('value', function() {
+  _title: computed('value', function() {
     return this.get('value').replace('_', ' ');
   }),
 
-  _offset: Ember.computed('value', function() {
+  _offset: computed('value', function() {
     return moment().tz(this.get('value')).format('Z');
   })
 });

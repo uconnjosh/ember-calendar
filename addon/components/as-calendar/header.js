@@ -1,10 +1,11 @@
-import Ember from 'ember';
+import { oneWay } from '@ember/object/computed';
+import Component from '@ember/component';
 
-export default Ember.Component.extend({
+export default Component.extend({
   classNameBindings: [':as-calendar-header'],
   tagName: 'header',
 
-  isInCurrentWeek: Ember.computed.oneWay('model.isInCurrentWeek'),
+  isInCurrentWeek: oneWay('model.isInCurrentWeek'),
   model: null,
   title: '',
 

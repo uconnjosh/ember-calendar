@@ -1,8 +1,12 @@
+import { debounce } from '@ember/runloop';
+import { isEmpty, isPresent } from '@ember/utils';
+import { computed } from '@ember/object';
+import { oneWay } from '@ember/object/computed';
+import Component from '@ember/component';
 import moment from 'moment';
-import Ember from 'ember';
 import TimeZoneOption from 'ember-calendar/models/time-zone-option';
 
-export default Ember.Component.extend({
+export default Component.extend({
   classNameBindings: [':as-calendar-time-zone-select', 'showResults:open'],
   tagName: 'section',
 
@@ -14,11 +18,11 @@ export default Ember.Component.extend({
   options: null,
   showSearch: true,
 
-  selectedOptionAbbreviation: Ember.computed.oneWay(
+  selectedOptionAbbreviation: oneWay(
     'selectedOption.abbreviation'
   ),
 
-  arrangedOptions: Ember.computed(
+  arrangedOptions: computed(
     '_options.@each.{description,value}',
     'selectedOption.value',
     'showSearch',
@@ -35,7 +39,7 @@ export default Ember.Component.extend({
     }
   }),
 
-  selectedOption: Ember.computed('value', function() {
+  selectedOption: computed('value', function() {
     let value = this.get('value');
 
     if (value) {
@@ -43,18 +47,18 @@ export default Ember.Component.extend({
     }
   }),
 
-  _query: Ember.computed('query', 'defaultQuery', function() {
+  _query: computed('query', 'defaultQuery', function() {
     let query = this.get('query');
 
-    if (Ember.isEmpty(query)) {
+    if (isEmpty(query)) {
        return this.get('defaultQuery');
     } else {
       return query;
     }
   }),
 
-  _options: Ember.computed('options', function() {
-    if (Ember.isPresent(this.get('options'))) {
+  _options: computed('options', function() {
+    if (isPresent(this.get('options'))) {
       return this.get('options');
     } else {
       return moment.tz.names().map(function(timeZoneName) {
@@ -69,7 +73,7 @@ export default Ember.Component.extend({
 
   actions: {
     inputQueryChanged: function(value) {
-      Ember.run.debounce(this, this._setQuery, value, 200);
+      debounce(this, this._setQuery, value, 200);
     }
   }
 });

@@ -1,7 +1,5 @@
+import { computed } from '@ember/object';
 import moment from 'moment';
-import Ember from 'ember';
-
-const { computed } = Ember;
 
 export default function(dependentKey) {
   return computed(dependentKey, {
