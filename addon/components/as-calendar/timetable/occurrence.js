@@ -5,7 +5,6 @@ import { oneWay } from '@ember/object/computed';
 import moment from 'moment';
 import interact from 'interact';
 import OccurrenceComponent from '../occurrence';
-import $ from 'jquery';
 
 export default OccurrenceComponent.extend({
   classNameBindings: [':as-calendar-occurrence--timetable'],
