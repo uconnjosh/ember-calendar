@@ -4,6 +4,7 @@ import { computed } from '@ember/object';
 import { oneWay } from '@ember/object/computed';
 import Component from '@ember/component';
 import moment from 'moment';
+import $ from 'jquery';
 
 export default Component.extend({
   classNameBindings: [':as-calendar-timetable-content'],
@@ -21,7 +22,7 @@ export default Component.extend({
 
   dayWidth: computed(function() {
     if (this.get('_wasInserted')) {
-      return this.$().width() / this.get('days.length');
+      return $(this.element).width() / this.get('days.length');
     } else {
       return 0;
     }
@@ -45,7 +46,7 @@ export default Component.extend({
   }),
 
   _selectTime: on('click', function(event) {
-    var offset = this.$().offset();
+    var offset = $(this.element).offset();
     var offsetX = event.pageX - Math.floor(offset.left);
     var offsetY = event.pageY - Math.floor(offset.top);
 

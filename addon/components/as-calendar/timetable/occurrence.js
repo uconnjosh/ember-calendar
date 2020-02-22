@@ -5,6 +5,7 @@ import { oneWay } from '@ember/object/computed';
 import moment from 'moment';
 import interact from 'interact';
 import OccurrenceComponent from '../occurrence';
+import $ from 'jquery';
 
 export default OccurrenceComponent.extend({
   classNameBindings: [':as-calendar-occurrence--timetable'],
@@ -25,7 +26,7 @@ export default OccurrenceComponent.extend({
   _preview: oneWay('_calendar.occurrencePreview'),
 
   _setupInteractable: on('didInsertElement', function() {
-    var interactable = interact(this.$()[0]).on('mouseup', (event) => {
+    var interactable = interact($(this.element)[0]).on('mouseup', (event) => {
       run(this, this._mouseUp, event);
     });
 
@@ -65,7 +66,7 @@ export default OccurrenceComponent.extend({
   }),
 
   _teardownInteractable: on('willDestroyElement', function() {
-    interact(this.$()[0]).off();
+    interact($(this.element)[0]).off();
   }),
 
   _resizeStart: function() {
@@ -96,7 +97,7 @@ export default OccurrenceComponent.extend({
   },
 
   _dragStart: function() {
-    var $this = this.$();
+    var $this = $(this.element);
     var $referenceElement = $(this.get('referenceElement'));
 
     this.set('isInteracting', true);
