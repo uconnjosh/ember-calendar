@@ -2,14 +2,39 @@ import { oneWay } from '@ember/object/computed';
 import EmberObject, { computed } from '@ember/object';
 import Ember from 'ember';
 import moment from 'moment';
-import computedMoment from 'ember-calendar/macros/computed-moment';
 import Day from './day';
 
 var OccurrenceProxy = EmberObject.extend(Ember.Copyable, {
   calendar: null,
   content: null,
-  endingTime: computedMoment('content.endsAt'),
-  startingTime: computedMoment('content.startsAt'),
+  endingTime: computed('content.endsAt', {
+    get() {
+      let endsAt = this.get('content.endsAt')
+
+      if (endsAt) {
+        return moment(endsAt)
+      }
+    },
+    set(value) {
+      if (value) {
+        return this.set('content.endsAt', value.toDate())
+      }
+    }
+  }),
+  startingTime: computed('content.startsAt', {
+    get() {
+      let startsAt = this.get('content.startsAt')
+
+      if (startsAt) {
+        return moment(startsAt)
+      }
+    },
+    set(value) {
+      if (value) {
+        return this.set('content.startsAt', value.toDate())
+      }
+    }
+  }),
   title: oneWay('content.title'),
 
   duration: computed('startingTime', 'endingTime', function() {

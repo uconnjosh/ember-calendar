@@ -3,7 +3,6 @@ import { htmlSafe } from '@ember/template';
 import { oneWay } from '@ember/object/computed';
 import Component from '@ember/component';
 import { get, computed } from '@ember/object';
-import computedDuration from 'ember-calendar/macros/computed-duration';
 import moment from 'moment';
 
 export default Component.extend({
@@ -17,8 +16,15 @@ export default Component.extend({
   title: oneWay('model.title'),
   content: oneWay('model.content'),
   day: oneWay('model.day'),
-  computedTimeSlotDuration: computedDuration('timeSlotDuration'),
+  computedTimeSlotDuration: computed('timeSlotDuration', function() {
+    timeSlotDuration = this.get('timeSlotDuration');
 
+    if (!timeSlotDuration) {
+      return
+    }
+
+    return moment.duration(timeSlotDuration)
+  }),
   titleStyle: computed('timeSlotHeight', function() {
     return htmlSafe(`line-height: ${this.get('timeSlotHeight')}px;`);
   }),
