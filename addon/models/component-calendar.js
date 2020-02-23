@@ -41,10 +41,11 @@ export default Calendar.extend({
   defaultOccurrenceTitle: oneWay(
     'component.defaultOccurrenceTitle'
   ),
-
-  defaultOccurrenceDuration: computedDuration(
-    'component.defaultOccurrenceDuration'
-  ),
+  defaultOccurrenceDuration: computed('component.defaultOccurrenceDuration', {
+    get() {
+      return this.computedDuration(this.get('component.defaultOccurrenceDuration'))
+    }
+  }),
 
   occurrences: computed('component.occurrences.[]', function() {
     let newOccurences = A();
