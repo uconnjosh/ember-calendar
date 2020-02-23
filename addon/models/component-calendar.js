@@ -18,7 +18,7 @@ export default Calendar.extend({
     },
     set(value) {
       if (value) {
-        return this.set('component.startingDate', value.toDate())
+        return this.set('component.startingDate', moment(value).toDate())
       }
     }
   }),

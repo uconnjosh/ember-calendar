@@ -17,7 +17,7 @@ var OccurrenceProxy = EmberObject.extend(Ember.Copyable, {
     },
     set(value) {
       if (value) {
-        return this.set('content.endsAt', value.toDate())
+        return this.set('content.endsAt', moment(value).toDate())
       }
     }
   }),
@@ -31,7 +31,7 @@ var OccurrenceProxy = EmberObject.extend(Ember.Copyable, {
     },
     set(value) {
       if (value) {
-        return this.set('content.startsAt', value.toDate())
+        return this.set('content.startsAt', moment(value).toDate())
       }
     }
   }),
